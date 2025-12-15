@@ -24,7 +24,12 @@ Recent changes in Nightly have moved the save and configuration file path to `%H
 For example `--savepath .` will read saves from the current directory (which not always matches the exe directory, but most of the time it does);
    `--savepath '!'` will read saves from the executable directory.
 
-## Building
-For building instructions, please refer to the [wiki](https://github.com/sm64pc/sm64ex/wiki).
+## Features on this branch (keyboard only)
+* Pressing L/R or D/U at the same time on keyboard presses L or D respectively
+* Holding LCTRL (default key) will change the stick to the value 41 in the direction you're pressing for a speedkick
+* Holding V (default key) will change the stick to the value 25 in the direction you're pressing for a quickturn
 
-**Make sure you have MXE first before attempting to compile for Windows on Linux and WSL. Follow the guide on the wiki.**
+## Building
+For building instructions, please refer to the [wiki](https://archipelago.gg/tutorial/Super%20Mario%2064/setup_en). (You will need to change the line where it says `git clone ...` to be ` git clone --recursive https://github.com/SmolAlli/sm64ex`. This has only been tested on Windows, but there's no reason for it to not work on Linux AFAIK.
+
+**BTW it is recommended to use MSYS rather than WSL for Windows users. WSL behaviour may vary and no support for trying to build via it will be given.**
