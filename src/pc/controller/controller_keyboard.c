@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <ultra64.h>
+#include <stdio.h>
 
 #include "controller_api.h"
 
@@ -61,20 +62,22 @@ static void keyboard_bindkeys(void) {
     bzero(keyboard_mapping, sizeof(keyboard_mapping));
     num_keybinds = 0;
 
-    keyboard_add_binds(STICK_UP,     configKeyStickUp);
-    keyboard_add_binds(STICK_LEFT,   configKeyStickLeft);
-    keyboard_add_binds(STICK_DOWN,   configKeyStickDown);
-    keyboard_add_binds(STICK_RIGHT,  configKeyStickRight);
-    keyboard_add_binds(A_BUTTON,     configKeyA);
-    keyboard_add_binds(B_BUTTON,     configKeyB);
-    keyboard_add_binds(Z_TRIG,       configKeyZ);
-    keyboard_add_binds(U_CBUTTONS,   configKeyCUp);
-    keyboard_add_binds(L_CBUTTONS,   configKeyCLeft);
-    keyboard_add_binds(D_CBUTTONS,   configKeyCDown);
-    keyboard_add_binds(R_CBUTTONS,   configKeyCRight);
-    keyboard_add_binds(L_TRIG,       configKeyL);
-    keyboard_add_binds(R_TRIG,       configKeyR);
+    keyboard_add_binds(STICK_UP, configKeyStickUp);
+    keyboard_add_binds(STICK_LEFT, configKeyStickLeft);
+    keyboard_add_binds(STICK_DOWN, configKeyStickDown);
+    keyboard_add_binds(STICK_RIGHT, configKeyStickRight);
+    keyboard_add_binds(A_BUTTON, configKeyA);
+    keyboard_add_binds(B_BUTTON, configKeyB);
+    keyboard_add_binds(Z_TRIG, configKeyZ);
+    keyboard_add_binds(U_CBUTTONS, configKeyCUp);
+    keyboard_add_binds(L_CBUTTONS, configKeyCLeft);
+    keyboard_add_binds(D_CBUTTONS, configKeyCDown);
+    keyboard_add_binds(R_CBUTTONS, configKeyCRight);
+    keyboard_add_binds(L_TRIG, configKeyL);
+    keyboard_add_binds(R_TRIG, configKeyR);
     keyboard_add_binds(START_BUTTON, configKeyStart);
+    keyboard_add_binds(SPEEDKICK, configKeySpeedkick);
+    keyboard_add_binds(QUICKTURN, configKeyQuickturn);
 }
 
 static void keyboard_init(void) {
@@ -86,17 +89,39 @@ static void keyboard_init(void) {
 }
 
 static void keyboard_read(OSContPad *pad) {
+    const s8 defaultStick = 127;
+    const s8 speedkickModifier = 41;
+    const s8 quickturnModifier = 25;
+
     pad->button |= keyboard_buttons_down;
+    const u32 speedkick = keyboard_buttons_down & SPEEDKICK;
+    const u32 quickturn = keyboard_buttons_down & QUICKTURN;
+
+    if (speedkick != 0 || quickturn != 0) {
+        printf("Speedkick LCTRL: %d, Quickturn V: %d", speedkick, quickturn);
+    }
+    // Modifiers for Speedkicks and Quickturns
+    s8 stick;
+    if (speedkick == SPEEDKICK) {
+        stick = speedkickModifier;
+    } else if (quickturn == QUICKTURN) {
+        stick = quickturnModifier;
+    } else {
+        stick = defaultStick;
+    }
+
     const u32 xstick = keyboard_buttons_down & STICK_XMASK;
     const u32 ystick = keyboard_buttons_down & STICK_YMASK;
-    if (xstick == STICK_LEFT)
-        pad->stick_x = -128;
+    // Chooses left if both l+r are pressed
+    if ((xstick == STICK_LEFT) || (xstick == STICK_LEFT + STICK_RIGHT))
+        pad->stick_x = -1 * stick;
     else if (xstick == STICK_RIGHT)
-        pad->stick_x = 127;
-    if (ystick == STICK_DOWN)
-        pad->stick_y = -128;
+        pad->stick_x = stick;
+    // Chooses down if both d+u are pressed
+    if ((ystick == STICK_DOWN) || (ystick == STICK_DOWN + STICK_UP))
+        pad->stick_y = -1 * stick;
     else if (ystick == STICK_UP)
-        pad->stick_y = 127;
+        pad->stick_y = stick;
 }
 
 static u32 keyboard_rawkey(void) {
@@ -109,12 +134,6 @@ static void keyboard_shutdown(void) {
 }
 
 struct ControllerAPI controller_keyboard = {
-    VK_BASE_KEYBOARD,
-    keyboard_init,
-    keyboard_read,
-    keyboard_rawkey,
-    NULL,
-    NULL,
-    keyboard_bindkeys,
-    keyboard_shutdown
+    VK_BASE_KEYBOARD,  keyboard_init,    keyboard_read, keyboard_rawkey, NULL, NULL,
+    keyboard_bindkeys, keyboard_shutdown
 };
