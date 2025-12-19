@@ -1,35 +1,38 @@
 # sm64ex
-Fork of [sm64-port/sm64-port](https://github.com/sm64-port/sm64-port) with additional features. 
 
-Feel free to report bugs and contribute, but remember, there must be **no upload of any copyrighted asset**. 
+Fork of [sm64-port/sm64-port](https://github.com/sm64-port/sm64-port) with additional features.
+
+Feel free to report bugs and contribute, but remember, there must be **no upload of any copyrighted asset**.
 Run `./extract_assets.py --clean && make clean` or `make distclean` to remove ROM-originated content.
 
 Please contribute **first** to the [nightly branch](https://github.com/sm64pc/sm64ex/tree/nightly/). New functionality will be merged to master once they're considered to be well-tested.
 
-*Read this in other languages: [Español](README_es_ES.md), [Português](README_pt_BR.md), [简体中文](README_zh_CN.md) or [Bahasa Melayu](README_ms_MY.md).*
+_Read this in other languages: [Español](README_es_ES.md), [Português](README_pt_BR.md), [简体中文](README_zh_CN.md) or [Bahasa Melayu](README_ms_MY.md)._
 
 ## New features
 
- * Options menu with various settings, including button remapping.
- * Optional external data loading (so far only textures and assembled soundbanks), providing support for custom texture packs.
- * Optional analog camera and mouse look (using [Puppycam](https://github.com/FazanaJ/puppycam)).
- * Optional OpenGL1.3-based renderer for older machines, as well as the original GL2.1, D3D11 and D3D12 renderers from Emill's [n64-fast3d-engine](https://github.com/Emill/n64-fast3d-engine/).
- * Option to disable drawing distances.
- * Optional model and texture fixes (e.g. the smoke texture).
- * Skip introductory Peach & Lakitu cutscenes with the `--skip-intro` CLI option
- * Cheats menu in Options (activate with `--cheats` or by pressing L thrice in the pause menu).
- * Support for both little-endian and big-endian save files (meaning you can use save files from both sm64-port and most emulators), as well as an optional text-based save format.
+-   Options menu with various settings, including button remapping.
+-   Optional external data loading (so far only textures and assembled soundbanks), providing support for custom texture packs.
+-   Optional analog camera and mouse look (using [Puppycam](https://github.com/FazanaJ/puppycam)).
+-   Optional OpenGL1.3-based renderer for older machines, as well as the original GL2.1, D3D11 and D3D12 renderers from Emill's [n64-fast3d-engine](https://github.com/Emill/n64-fast3d-engine/).
+-   Option to disable drawing distances.
+-   Optional model and texture fixes (e.g. the smoke texture).
+-   Skip introductory Peach & Lakitu cutscenes with the `--skip-intro` CLI option
+-   Cheats menu in Options (activate with `--cheats` or by pressing L thrice in the pause menu).
+-   Support for both little-endian and big-endian save files (meaning you can use save files from both sm64-port and most emulators), as well as an optional text-based save format.
 
 Recent changes in Nightly have moved the save and configuration file path to `%HOMEPATH%\AppData\Roaming\sm64ex` on Windows and `$HOME/.local/share/sm64ex` on Linux. This behaviour can be changed with the `--savepath` CLI option.
 For example `--savepath .` will read saves from the current directory (which not always matches the exe directory, but most of the time it does);
-   `--savepath '!'` will read saves from the executable directory.
+`--savepath '!'` will read saves from the executable directory.
 
 ## Features on this branch (keyboard only)
-* Pressing L/R or D/U at the same time on keyboard presses L or D respectively
-* Holding LCTRL (default key) will change the stick to the value 41 in the direction you're pressing for a speedkick
-* Holding V (default key) will change the stick to the value 25 in the direction you're pressing for a quickturn
+
+-   Pressing L/R or D/U at the same time on keyboard presses L or D respectively
+-   Holding LCTRL (default key) will change the stick to the value 41 (or 29 on diagonals) in the direction you're pressing for a speedkick
+-   Holding V (default key) will change the stick to the value 25 (or 17 on diagonals) in the direction you're pressing for a quickturn
 
 ## Building
-For building instructions, please refer to the [wiki](https://archipelago.gg/tutorial/Super%20Mario%2064/setup_en). (You will need to change the line where it says `git clone ...` to be ` git clone --recursive https://github.com/SmolAlli/sm64ex`. This has only been tested on Windows, but there's no reason for it to not work on Linux AFAIK.
 
-**BTW it is recommended to use MSYS rather than WSL for Windows users. WSL behaviour may vary and no support for trying to build via it will be given.**
+For building instructions, please refer to the [wiki](https://archipelago.gg/tutorial/Super%20Mario%2064/setup_en). (You will need to change the line where it says `git clone ...` to be `git clone --recursive https://github.com/SmolAlli/sm64ex`. This has only been tested on Windows, but there's no reason for it to not work on Linux AFAIK.
+
+**BTW it is recommended to use MSYS/MINGW64 rather than WSL for Windows users. WSL behaviour may vary and no support for trying to build via it will be given.**

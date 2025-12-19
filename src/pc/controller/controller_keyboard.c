@@ -91,27 +91,35 @@ static void keyboard_init(void) {
 static void keyboard_read(OSContPad *pad) {
     const s8 defaultStick = 127;
     const s8 speedkickModifier = 41;
+    const s8 speedkickModifierDiagonal = 29;
     const s8 quickturnModifier = 25;
+    const s8 quickturnModifierDiagonal = 17;
 
     pad->button |= keyboard_buttons_down;
     const u32 speedkick = keyboard_buttons_down & SPEEDKICK;
     const u32 quickturn = keyboard_buttons_down & QUICKTURN;
 
-    if (speedkick != 0 || quickturn != 0) {
-        printf("Speedkick LCTRL: %d, Quickturn V: %d", speedkick, quickturn);
-    }
+    const u32 xstick = keyboard_buttons_down & STICK_XMASK;
+    const u32 ystick = keyboard_buttons_down & STICK_YMASK;
+
     // Modifiers for Speedkicks and Quickturns
     s8 stick;
     if (speedkick == SPEEDKICK) {
-        stick = speedkickModifier;
+        if (xstick != 0 && ystick != 0) {
+            stick = speedkickModifierDiagonal;
+        } else {
+            stick = speedkickModifier;
+        }
     } else if (quickturn == QUICKTURN) {
-        stick = quickturnModifier;
+        if (xstick != 0 && ystick != 0) {
+            stick = quickturnModifierDiagonal;
+        } else {
+            stick = quickturnModifier;
+        }
     } else {
         stick = defaultStick;
     }
 
-    const u32 xstick = keyboard_buttons_down & STICK_XMASK;
-    const u32 ystick = keyboard_buttons_down & STICK_YMASK;
     // Chooses left if both l+r are pressed
     if ((xstick == STICK_LEFT) || (xstick == STICK_LEFT + STICK_RIGHT))
         pad->stick_x = -1 * stick;
